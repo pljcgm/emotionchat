@@ -1,11 +1,10 @@
 import socket
 import threading
 import pyaudio
-import random
 import time
 import tkinter
 import queue
-from emotions import EmotionDetection
+from src.emotions import EmotionDetection
 
 
 class GuiPart:

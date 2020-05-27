@@ -5,7 +5,7 @@ import threading
 class Server:
     def __init__(self):
         self.ip = "0.0.0.0"
-        while 1:
+        while True:
             try:
                 self.port_audio = 9999
                 self.port_text = 9998
@@ -15,10 +15,11 @@ class Server:
 
                 self.s_text = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.s_text.bind((self.ip, self.port_text))
-
                 break
-            except:
-                print("Couldn't bind to that port")
+            except Exception as e:
+                print(e)
+                print(f"Couldn't bind to {self.ip}:{self.port_audio}")
+                print(f"Couldn't bind to {self.ip}:{self.port_text}")
 
         self.connections = []
         self.connections_text = []
@@ -28,8 +29,8 @@ class Server:
         self.s_audio.listen(2)
         self.s_text.listen(2)
 
-        print('Running on IP: ' + self.ip)
-        print('Audio running on port: ' + str(self.port_audio))
+        print(f"Running on IP: {self.ip}")
+        print(f"Audio running on port: {self.port_audio}")
         print(f"Text running on port: {self.port_text}")
 
         while True:
@@ -66,13 +67,13 @@ class Server:
                 data = c.recv(1024)
                 print(data)
                 self.broadcast_text(c, data)
-            except socket.error:                                                                                                        c.close()
+            except socket.error:
+                c.close()
 
     def handle_client(self, c, addr):
         while 1:
             try:
                 data = c.recv(1024)
-                #self.playing_stream.write(data) ## TEST
                 self.broadcast(c, data)
             except socket.error:
                 c.close()
