@@ -7,7 +7,8 @@ from tensorflow.keras.layers import MaxPooling2D
 
 
 class EmotionDetection:
-    def __init__(self):
+    def __init__(self, model='model.h5'):
+        self.model_file = model
         self.current_emotion = "Neutral"
         self.emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
         self.model = Sequential()
@@ -28,7 +29,7 @@ class EmotionDetection:
         self.model.add(Dense(1024, activation='relu'))
         self.model.add(Dropout(0.5))
         self.model.add(Dense(7, activation='softmax'))
-        self.model.load_weights('model.h5')
+        self.model.load_weights(self.model_file)
 
     def start_detection(self):
         self.cap = cv2.VideoCapture(0)
@@ -50,5 +51,21 @@ class EmotionDetection:
                 cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
                 prediction = self.model.predict(cropped_img)
                 maxindex = int(np.argmax(prediction))
-                self.current_emotion = self.emotion_dict[maxindex]
+                if self.model == 'model.h5' or 'self_trained_model.h5':
+                    self.current_emotion = self.emotion_dict[maxindex]
+                else:
+                    if maxindex == 0:
+                        self.current_emotion = "Angry"
+                    elif maxindex == 1:
+                        self.current_emotion = "Disgust"
+                    elif maxindex == 2:
+                        self.current_emotion = "Fear"
+                    elif maxindex == 3:
+                        self.current_emotion = "Happy"
+                    elif maxindex== 4:
+                        self.current_emotion = "Sad"
+                    elif maxindex == 5:
+                        self.current_emotion = "Surprise"
+                    else:
+                        self.current_emotion = "Neutral"
         self.cap.release()

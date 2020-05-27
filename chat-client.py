@@ -29,11 +29,12 @@ class GuiPart:
 
 
 class Client:
-    def __init__(self, master, host):
+    def __init__(self, master, host, model):
         self.master = master
         self.queue = queue.Queue()
         self.gui = GuiPart(master, self.queue)
-        self.emotion_detection = EmotionDetection()
+        print(model)
+        self.emotion_detection = EmotionDetection(model=model)
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s_text = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -110,5 +111,5 @@ class Client:
 
 if __name__ == "__main__":
     root = tkinter.Tk()
-    client = Client(root, "lucasjeske.de")
+    client = Client(root, "lucasjeske.de", "model_self_trained.h5")
     root.mainloop()
