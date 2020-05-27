@@ -8,10 +8,11 @@ from src.emotions import EmotionDetection
 
 
 class GuiPart:
-    def __init__(self, master, message_queue):
+    def __init__(self, root, message_queue):
         self.queue = message_queue
+
         # Set up the GUI
-        self.emotion_label = tkinter.Label(master, text="NEUTRAL", foreground="white", font=("Courier", 44),
+        self.emotion_label = tkinter.Label(root, text="NEUTRAL", foreground="white", font=("Courier", 44),
                                            background="black", width=300, height=100)
         self.emotion_label.pack()
         # Add more GUI stuff here depending on your specific needs
@@ -32,7 +33,6 @@ class Client:
         self.master = master
         self.queue = queue.Queue()
         self.gui = GuiPart(master, self.queue)
-        print(model)
         self.emotion_detection = EmotionDetection(model=model)
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s_text = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -109,6 +109,6 @@ class Client:
 
 
 if __name__ == "__main__":
-    root = tkinter.Tk()
-    client = Client(root, "lucasjeske.de", "model_self_trained.h5")
-    root.mainloop()
+    tk_root = tkinter.Tk()
+    client = Client(tk_root, "lucasjeske.de", "model_self_trained.h5")
+    tk_root.mainloop()

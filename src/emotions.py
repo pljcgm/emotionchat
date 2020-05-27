@@ -10,7 +10,8 @@ class EmotionDetection:
     def __init__(self, model='model.h5'):
         self.model_file = model
         self.current_emotion = "Neutral"
-        self.emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+        self.emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy",
+                             4: "Neutral", 5: "Sad", 6: "Surprised"}
         self.model = Sequential()
         self.initialize_model()
 
@@ -53,7 +54,7 @@ class EmotionDetection:
                 cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
                 prediction = self.model.predict(cropped_img)
                 maxindex = int(np.argmax(prediction))
-
-                self.current_emotion = self.emotion_dict[maxindex]
+                if self.emotion_dict[maxindex]:
+                    self.current_emotion = self.emotion_dict[maxindex]
 
         cap.release()
