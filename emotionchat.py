@@ -8,7 +8,7 @@ EmotionChat CLI.
 
 Usage:
   emotionchat.py [--host=<hostip>] [--model=<modelfile>]
-  cli_audiorecorder.py -h | --help
+  emotionchat.py -h | --help
 
 Options:
   -h --help             Show this screen.
