@@ -1,5 +1,5 @@
 import numpy as np
-import cv2
+import cv2.cv2 as cv2
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.layers import Conv2D
@@ -13,7 +13,8 @@ class EmotionDetection:
         self.emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
         self.model = Sequential()
         self.initialize_model()
-        cv2.ocl.setUseOpenCL(False) # prevents openCL usage and unnecessary logging messages
+
+        cv2.ocl.setUseOpenCL(False)  # prevents openCL usage and unnecessary logging messages
 
     def initialize_model(self):
         self.model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(48, 48, 1)))
@@ -32,10 +33,10 @@ class EmotionDetection:
         self.model.load_weights(self.model_file)
 
     def start_detection(self):
-        self.cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(0)
         while True:
             # Find haar cascade to draw bounding box around face
-            ret, frame = self.cap.read()
+            ret, frame = cap.read()
             if not ret:
                 break
             facecasc = cv2.CascadeClassifier('src/haarcascade_frontalface_default.xml')
@@ -43,7 +44,6 @@ class EmotionDetection:
             faces = []
             try:
                 faces = facecasc.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-                break
             except Exception as e:
                 print(e)
 
@@ -56,4 +56,4 @@ class EmotionDetection:
 
                 self.current_emotion = self.emotion_dict[maxindex]
 
-        self.cap.release()
+        cap.release()
