@@ -9,7 +9,10 @@ from src.emotions import EmotionDetection
 
 class GuiPart:
     def __init__(self, root, message_queue):
+        self.root = root
         self.queue = message_queue
+
+        self.root.bind('<Escape>', lambda e: root.destroy())
 
         # Set up the GUI
         self.emotion_label = tkinter.Label(root, text="NEUTRAL", foreground="white", font=("Courier", 44),
